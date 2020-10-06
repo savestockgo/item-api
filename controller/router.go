@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"os"
+
 	"github.com/andersonlira/item-api/config"
 	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
@@ -19,6 +21,15 @@ func MapRoutes(e *echo.Echo) {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization, echo.HeaderContentType},
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS},
 	}))
+
+	e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		key := os.Getenv("apikey")
+		secret := os.Getenv("apisecret")
+		if username == key && password == secret {
+			return true, nil
+		}
+		return false, nil
+	}))		
 
 	g.GET("/item", GetItemList)
 	g.GET("/item/:id", GetItemByID)
