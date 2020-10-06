@@ -32,6 +32,6 @@ func LastPrice(ID string, price domain.Price,op Option) error {
 
 	}
 
-	txtdb.SaveItem(item)
+	txtdb.UpdateItem(ID, item)
 	return nil
 }
