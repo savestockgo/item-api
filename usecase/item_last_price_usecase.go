@@ -1,9 +1,12 @@
 package usecase
 
 import (
+	"sync"
+
 	"github.com/andersonlira/item-api/domain"
 	"github.com/andersonlira/item-api/gateway/txtdb"
 )
+
 
 type Option int
 
@@ -13,7 +16,10 @@ const (
 	Last
 )
 
+var m = &sync.Mutex{}
+
 func LastPrice(ID string, price domain.Price,op Option) error {
+	m.Lock()
 	item, err := txtdb.GetItemByID(ID)
 	if err != nil {
 		return err
@@ -33,5 +39,6 @@ func LastPrice(ID string, price domain.Price,op Option) error {
 	}
 
 	txtdb.UpdateItem(ID, item)
+	m.Unlock()
 	return nil
 }
