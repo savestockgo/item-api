@@ -5,6 +5,7 @@ import (
 	"errors"
     "fmt"
 	"log"
+	"strings"
 	"time"
 
     "github.com/andersonlira/item-api/domain"
@@ -42,6 +43,8 @@ func GetItemByID(ID string) (domain.Item, error) {
 func SaveItem(it domain.Item) domain.Item {
 	list := GetItemList()
 	it.ID = str.NewUUID()
+	it.Initial = strings.ToUpper(it.Initial)
+	it.Name = strings.Title(it.Name)
 	it.CreatedAt = time.Now()
 	list = append(list, it)
 	writeItem(list)
@@ -55,6 +58,8 @@ func UpdateItem(ID string, it domain.Item) domain.Item{
 		if(list[idx].ID == ID){
 			list[idx] = it
 			list[idx].ID = ID
+			list[idx].Initial = strings.ToUpper(it.Initial)
+			list[idx].Name = strings.Title(it.Name)
 			list[idx].UpdatedAt = time.Now()
 			writeItem(list)
 			return list[idx]
