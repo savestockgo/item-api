@@ -25,7 +25,7 @@ func MapRoutes(e *echo.Echo) {
 		AllowMethods: []string{echo.OPTIONS, echo.GET, echo.HEAD, echo.PUT, echo.POST, echo.DELETE},
 	}))
 
-	e.Use(BasicAuth)
+	g.Use(BasicAuth)
 
 
 	g.OPTIONS("/item", getDefaultOptions)	
@@ -41,8 +41,8 @@ func MapRoutes(e *echo.Echo) {
 	g.PATCH("/item/:id/price/last", LastPrice)
 }
 
-func getDefaultOptions(e echo.Context) error {
-	return nil
+func getDefaultOptions(c echo.Context) error {
+	return c.JSON(http.StatusNoContent,nil)
 }
 
 // Process is the middleware function to enabled options
